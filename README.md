@@ -1,4 +1,4 @@
-# OrangeHRM Comment Thread Component
+# OrangeHRM Assesment Thread Component
 
 This repository contains a React-based Reddit-like comment thread component, developed for the OrangeHRM Skill Assessment. The component allows users to input comments, display them in a nested thread, upvote/downvote comments, and reply to any comment.
 
