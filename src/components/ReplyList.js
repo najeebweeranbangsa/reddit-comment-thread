@@ -1,4 +1,3 @@
-// src/components/ReplyList.js
 import React from 'react';
 import Comment from './Comment';
 
