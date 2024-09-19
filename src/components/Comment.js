@@ -1,25 +1,65 @@
-import React from 'react';
-import VoteButtons from './VoteButtons';
-import CommentForm from './CommentForm';
-import ReplyList from './ReplyList';
+import React, { useState } from "react";
+import CommentForm from "./CommentForm";
+import VoteButtons from "./VoteButtons";
 
-const Comment = ({ comment, dispatch }) => {
+function Comment({ comment, dispatch }) {
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [hasUpvoted, setHasUpvoted] = useState(false); 
+  const [hasDownvoted, setHasDownvoted] = useState(false); 
+  const [voteCount, setVoteCount] = useState(comment.votes); 
+
+
   const addReply = (text) => {
-    dispatch({ type: 'ADD_REPLY', payload: { commentId: comment.id, reply: { id: Date.now(), text, votes: 0 } } });
+    const reply = { id: Date.now(), text, votes: 0, replies: [] };
+    dispatch({ type: "ADD_REPLY", payload: { parentId: comment.id, reply } });
+    setShowReplyForm(false);
+  };
+
+  const handleUpvote = () => {
+    if (!hasUpvoted) {
+      setVoteCount(voteCount + 1); 
+      setHasUpvoted(true);
+      if (hasDownvoted) {
+        setHasDownvoted(false);
+        setVoteCount(voteCount + 1); 
+      }
+    }
+  };
+
+
+  const handleDownvote = () => {
+    if (!hasDownvoted) {
+      setVoteCount(voteCount - 1); 
+      setHasDownvoted(true);
+      if (hasUpvoted) {
+        setHasUpvoted(false);
+        setVoteCount(voteCount - 1); 
+      }
+    }
   };
 
   return (
     <div className="comment">
-      <div className="comment-text">{comment.text}</div>
+      <p>{comment.text}</p>
       <VoteButtons
-        onUpvote={() => dispatch({ type: 'UPVOTE', payload: { id: comment.id } })}
-        onDownvote={() => dispatch({ type: 'DOWNVOTE', payload: { id: comment.id } })}
-        votes={comment.votes}
+        votes={voteCount}
+        onUpvote={handleUpvote}
+        onDownvote={handleDownvote}
+        hasUpvoted={hasUpvoted}
+        hasDownvoted={hasDownvoted}
       />
-      <CommentForm onSubmit={addReply} />
-      <ReplyList replies={comment.replies} dispatch={dispatch} />
+      <button onClick={() => setShowReplyForm(!showReplyForm)}>Reply</button>
+      {showReplyForm && <CommentForm onSubmit={addReply} />}
+      {  }
+      {comment.replies.length > 0 && (
+        <div className="replies">
+          {comment.replies.map((reply) => (
+            <Comment key={reply.id} comment={reply} dispatch={dispatch} />
+          ))}
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Comment;

@@ -1,11 +1,17 @@
-import React from 'react';
+import React from "react";
 
-const VoteButtons = ({ onUpvote, onDownvote, votes }) => (
-  <div className="vote-buttons">
-    <button onClick={onUpvote}>Upvote</button>
-    <button onClick={onDownvote}>Downvote</button>
-    <span>Votes: {votes}</span>
-  </div>
-);
+function VoteButtons({ votes, onUpvote, onDownvote, hasUpvoted, hasDownvoted }) {
+  return (
+    <div className="vote-buttons">
+      <button onClick={onUpvote} disabled={hasUpvoted}>
+        Upvote
+      </button>
+      <span>{votes}</span> {}
+      <button onClick={onDownvote} disabled={hasDownvoted}>
+        Downvote
+      </button>
+    </div>
+  );
+}
 
 export default VoteButtons;

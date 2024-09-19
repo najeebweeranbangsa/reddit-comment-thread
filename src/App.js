@@ -5,7 +5,7 @@ import './styles/main.scss';
 function App() {
   return (
     <div className="App">
-      <h1>Reddit-like Comment Thread</h1>
+      <h1>Reddit-like comment thread component</h1>
       <CommentThread />
     </div>
   );
